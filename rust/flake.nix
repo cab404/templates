@@ -1,7 +1,5 @@
 {
 
-  description = "CHANGEME";
-
   inputs = {
     naersk.url = "github:nmattia/naersk/master";
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -17,9 +15,13 @@
 
         defaultPackage = naersk-lib.buildPackage ./.;
 
-        defaultApp = {
-          type = "app";
-          program = "${self.defaultPackage."${system}"}/bin/${self.defaultPackage."${system}".pname}";
+        defaultApp = utils.mkApp {
+            drv = self.defaultPackage."${system}";
+        };
+
+        devShell = with pkgs; mkShell {
+          buildInputs = [ cargo rustc rustfmt pre-commit rustPackages.clippy ];
+          RUST_SRC_PATH = rustPlatform.rustLibSrc;
         };
 
       });

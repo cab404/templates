@@ -3,3 +3,4 @@ secrets.py
 runs
 .ipynb_*
 *.csv
+.direnv
